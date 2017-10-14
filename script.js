@@ -280,9 +280,16 @@
         try {
             // Set BIN price to 200.
             const quickListPanelActions = getQuickListPanelActions();
-            const binAction = quickListPanelActions.getElementsByClassName('panelActionRow')[2];
-            const binActionInput = binAction.getElementsByTagName('input')[0];
-            binActionInput.value = 200;
+
+            const actionRows = quickListPanelActions.getElementsByClassName('panelActionRow');
+
+            const startPriceRow = actionRows[1];
+            const startPriceInput = startPriceRow.getElementsByTagName('input')[0];
+            startPriceInput.value = 150;
+
+            const buyNowRow = actionRows[2];
+            const buyNowInput = buyNowRow.getElementsByTagName('input')[0];
+            buyNowInput.value = 200;
 
             // Tap "List Item" button.
             const buttons = quickListPanelActions.getElementsByTagName('button');
