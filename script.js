@@ -17,7 +17,7 @@
                 if (ev.altKey) {
                     storeAllInClub();
                 } else {
-                    pressDetailsPanelButton('Send to My Club');
+                    storeInClub();
                 }
                 break;
             case 84 /* t */:
@@ -154,22 +154,25 @@
     }
 
     /**
-     * Quick sells the current item.
+     * Quick sells the current item. If it fails, we try to redeem item (maybe
+     * coins or packs).
      */
     function quickSell() {
         log('Attempting to quick sell the current item...');
 
         try {
             // Tap "Quick Sell" button.
-            const buttonArray = getDetailsPanelButtons();
-            const quickSellButton = buttonArray[buttonArray.length - 1];
-            tapElement(quickSellButton);
+            pressDetailsPanelButton('Quick Sell');
 
             // Press OK.
             confirmDialog();
         } catch (error) {
-            log('Unable to locate "Quick Sell" button.', true /* isError */);
-            return;
+            try {
+                pressDetailsPanelButton('Redeem');
+            } catch (error) {
+                log('Unable to locate "Quick Sell" button.', true /* isError */);
+                return;
+            }
         }
 
         log('Successfully quick sold the current item.');
@@ -186,10 +189,11 @@
         try {
             // Tap the relevant button.
             const buttonArray = getDetailsPanelButtons();
-            const button = buttonArray.filter((button) => button.innerText.indexOf(buttonLabel) > -1)[0];
+            const button = buttonArray.filter((button) => button.innerText.indexOf(buttonLabel) > -1 && button.style.display !== 'none')[0];
             tapElement(button);
         } catch (error) {
             log(`Unable to locate the "${buttonLabel}" button.`, true /* isError */);
+            throw `Unable to locate the "${buttonLabel}" button.`;
             return;
         }
 
@@ -246,6 +250,28 @@
         }
 
         log(`Successfully toggled current item's "watched" status.`);
+    }
+
+    /**
+     * Attemps to store current item in the club. If "Send to My Club" button
+     * is hidden, we try to "Redeem" item (maybe coins or packs).
+     */
+    function storeInClub() {
+        log('Attempting to store item in the club...');
+
+        try {
+            pressDetailsPanelButton('Send to My Club');
+        } catch (error) {
+            try {
+                pressDetailsPanelButton('Redeem');
+            } catch (error) {
+                log(error, true /* isError */);
+                log('Unable to store item in the club.', /* isError */);
+                return;
+            }
+        }
+
+        log('Succesfully stored item in the club.');
     }
 
     /**
