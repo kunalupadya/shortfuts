@@ -1,7 +1,5 @@
 (function(){
-    const APP_NAME = 'shortfuts';
-
-    log('Initializing...');
+    commonUtility.log('Initializing extension...');
 
     window.addEventListener('keydown', function(ev) {
         const keyCode = ev.keyCode;
@@ -14,14 +12,10 @@
                 listMinBin();
                 break;
             case 83 /* s */:
-                if (ev.altKey) {
-                    storeAllInClub();
-                } else {
-                    storeInClub();
-                }
+                storeInClub();
                 break;
             case 84 /* t */:
-                pressDetailsPanelButton('Send to Transfer List');
+                sendToTransferList();
                 break;
             case 81 /* q */:
                 quickSell();
@@ -53,32 +47,73 @@
      * Buys a regular bronze pack.
      */
     function buyBronzePack() {
-        log('Attempting to buy a bronze pack...');
+        commonUtility.log('Attempting to buy a bronze pack...');
 
         try {
             // Only execute this shortcut if in the "Store" tab.
-            const storeHub = document.getElementById('StoreHub');
-            if (!storeHub) {
-                log('Not on store page, so not trying to buy a pack.', true /* isError */);
+            if (!domUtility.isUserOnPage('Store')) {
+                commonUtility.logError('Not on store page, so not trying to buy a pack.');
                 return;
             }
 
-            const bronzeTabButton = document.getElementsByClassName('TabMenuItem')[2];
-            tapElement(bronzeTabButton);
+            // Go to "Bronze" store tab.
+            domUtility.goToStoreTab('Bronze');
 
             setTimeout(() => {
-                const bronzePackButton = document.getElementsByClassName('currency call-to-action cCoins')[0];
-                tapElement(bronzePackButton);
+                // Buy a 400 token bronze pack.
+                domUtility.clickBronzePackButton();
 
                 // Press OK.
-                confirmDialog();
-            }, 200);
+                domUtility.confirmDialog();
+            }, commonUtility.getRandomWait());
         } catch (error) {
-            log('Unable to buy a bronze pack.', true /* isError */);
+            commonUtility.logError('Unable to buy a bronze pack.');
             return;
         }
 
-        log('Successfully bought a bronze pack.');
+        commonUtility.log('Successfully bought a bronze pack.');
+    }
+
+    /**
+     * Executes "Buy Now" on the selected on "Search Results" page.
+     */
+    function buyNow() {
+        commonUtility.log('Attempting to "Buy Now" currently selected item...');
+
+        if (!domUtility.isUserOnPage('Search Results')) {
+            commonUtility.logError(`Not executing "Buy Now" because we're not on the "Search Results" page.`);
+            return;
+        }
+
+        try {
+            // Tap "Buy Now" button.
+            domUtility.clickBuyNowButton();
+
+            // Press OK.
+            domUtility.confirmDialog();
+        } catch (error) {
+            commonUtility.logError(error);
+            return;
+        }
+
+        commonUtility.log('Successfully executed "Buy Now" on selected item.');
+    }
+
+    /**
+     * Search for the current item to see what other ones on the market are going for.
+     */
+    function comparePrice() {
+        commonUtility.log('Attempting to search for current item to compare price...');
+
+        try {
+            // Tap "Compare Price" button.
+            domUtility.clickComparePrice();
+        } catch (error) {
+            commonUtility.logError('Unable to click "Compare Price" button.');
+            return;
+        }
+
+        commonUtility.log('Successfully searched for current item.');
     }
 
     /**
@@ -89,23 +124,37 @@
          * Extra check for English language to only allow back button shortcut
          * on the "Search Results" page.
          */
-        if (document.getElementsByClassName('SearchResults').length === 0) {
-            log('Not going back because we\'re not on the search results page.');
+        if (!domUtility.isUserOnPage('Search Results')) {
+            commonUtility.log('Not going back because we\'re not on the search results page.');
             return;
         }
 
-        log('Attempting to go to the previous page...');
+        commonUtility.log('Attempting to go to the previous page...');
+
+        // Clicks the back button.
+        try {
+            domUtility.clickBackButton();
+        } catch (error) {
+            console.logError(error);
+        }
+
+        commonUtility.log('Successfully went back.');
+    }
+
+    /**
+     * Lists the current item with a BIN price of 200.
+     */
+    function listMinBin() {
+        commonUtility.log('Attempting to list current item for minimum BIN...');
 
         try {
-            const backButton = document.getElementsByClassName('btn-flat back headerButton')[0];
-            tapElement(backButton);
+            domUtility.listItem(150, 200);
         } catch (error) {
-            log(error, true /* isError */);
-            log('Unable to go back.', true /* isError */);
+            commonUtility.logError(error);
             return;
         }
 
-        log('Successfully went back.');
+        commonUtility.log('Successfully listed current item for minimum BIN.');
     }
 
     /**
@@ -114,43 +163,28 @@
      * @param {Event} ev
      */
     function move(ev) {
-        log('Attempting to change the currently selected item...');
+        commonUtility.log('Attempting to change the currently selected item...');
 
         try {
             const isDown = ev.keyCode === 40;
 
             // Get all items.
-            let items = [];
-            if (isSpecificPage('Search Results')) {
-                const itemList = document.getElementsByClassName('paginated-item-list')[0];
-                items = Array.from(itemList.getElementsByClassName('listFUTItem'));
-            } else if (isSpecificPage('Transfer List')) {
-                const itemLists = Array.from(document.getElementsByClassName('itemList'));
-                itemLists.forEach(function(itemList) {
-                    items = items.concat(Array.from(itemList.getElementsByClassName('listFUTItem')));
-                }, this);
-            } else {
-                const itemList = document.getElementsByClassName('itemList')[0];
-                items = Array.from(itemList.getElementsByClassName('listFUTItem'));
-            }
+            let items = domUtility.getListItems();
 
             // Get current index.
-            let currentIndex = items.findIndex((item) => { return item.className.indexOf('selected') > -1; })
+            let currentIndex = domUtility.getCurrentSelectedIndex(items);
 
             if (isDown && currentIndex + 1 <= items.length) {
-                const div = items[++currentIndex].getElementsByClassName('has-tap-callback')[0];
-                tapElement(div);
+                currentIndex = domUtility.selectNextItem(items, currentIndex);
             } else if (!isDown && currentIndex - 1 >= 0) {
-                const div = items[--currentIndex].getElementsByClassName('has-tap-callback')[0];
-                tapElement(div);
+                currentIndex = domUtility.selectPreviousItem(items, currentIndex);
             }
         } catch (error) {
-            log(error);
-            log('Unable to change the currently selected item...', true /* isError */);
+            commonUtility.logError(error);
             return;
         }
 
-        log('Successfully changed the currently selected item.');
+        commonUtility.log('Successfully changed the currently selected item.');
     }
 
     /**
@@ -158,98 +192,41 @@
      * coins or packs).
      */
     function quickSell() {
-        log('Attempting to quick sell the current item...');
+        commonUtility.log('Attempting to quick sell the current item...');
 
         try {
             // Tap "Quick Sell" button.
-            pressDetailsPanelButton('Quick Sell');
+            domUtility.clickDetailsPanelButton('Quick Sell');
 
             // Press OK.
-            confirmDialog();
+            domUtility.confirmDialog();
         } catch (error) {
+            commonUtility.logError(error);
+
             try {
-                pressDetailsPanelButton('Redeem');
+                domUtility.clickDetailsPanelButton('Redeem');
             } catch (error) {
-                log('Unable to locate "Quick Sell" button.', true /* isError */);
+                commonUtility.logError(error);
                 return;
             }
         }
 
-        log('Successfully quick sold the current item.');
+        commonUtility.log('Successfully quick sold the current item.');
     }
 
     /**
-     * Presses a button in the item details panel, based on a given button label.
-     *
-     * @param {string} buttonLabel
+     * Sends current item to transfer list.
      */
-    function pressDetailsPanelButton(buttonLabel) {
-        log(`Attempting to press "${buttonLabel}" button...`);
+    function sendToTransferList() {
+        commonUtility.log('Attempting to send current item to transfer list...');
 
         try {
-            // Tap the relevant button.
-            const buttonArray = getDetailsPanelButtons();
-            const button = buttonArray.filter((button) => button.innerText.indexOf(buttonLabel) > -1 && button.style.display !== 'none')[0];
-            tapElement(button);
+            domUtility.clickDetailsPanelButton('Send to Transfer List');
         } catch (error) {
-            log(`Unable to locate the "${buttonLabel}" button.`, true /* isError */);
-            throw `Unable to locate the "${buttonLabel}" button.`;
-            return;
+            logError(error);
         }
 
-        log(`Successfully pressed "${buttonLabel}" button.`);
-    }
-
-
-    /**
-     * Executes "Buy Now" on the selected on "Search Results" page.
-     */
-    function buyNow() {
-        log('Attempting to "Buy Now" currently selected item...');
-
-        if (document.getElementsByClassName('SearchResults').length === 0) {
-            log(`Not executing "Buy Now" because we're not on the "Search Results" page.`, true /* isError */);
-            return;
-        }
-
-        try {
-            // Tap "Buy Now" button.
-            const buyNowButton = getBuyNowButton();
-            tapElement(buyNowButton);
-
-            // Press OK.
-            confirmDialog();
-        } catch (error) {
-            log('Unable to locate "Buy Now" button.', true /* isError */);
-            return;
-        }
-
-        log('Successfully executed "Buy Now" on selected item.');
-    }
-
-
-    /**
-     * Toggles the current item's status on the "Transfer Targets" list (i.e. adds if
-     * it's not on there already, or removes if it is).
-     */
-    function toggleTransferTargetStatus() {
-        log(`Attempting to toggle current item's "watched" status...`);
-
-        if (document.getElementsByClassName('SearchResults').length === 0) {
-            log(`Not executing "Watch" because we're not on the "Search Results" page.`, true /* isError */);
-            return;
-        }
-
-        try {
-            // Tap "Watch" or "Unwatch" button.
-            const watchButton = document.getElementsByClassName('watch')[0];
-            tapElement(watchButton);
-        } catch (error) {
-            log('Unable to locate "Watch" button.', true /* isError */);
-            return;
-        }
-
-        log(`Successfully toggled current item's "watched" status.`);
+        commonUtility.log('Successfully sent current item to transfer list.');
     }
 
     /**
@@ -257,212 +234,44 @@
      * is hidden, we try to "Redeem" item (maybe coins or packs).
      */
     function storeInClub() {
-        log('Attempting to store item in the club...');
+        commonUtility.log('Attempting to store item in the club...');
 
         try {
-            pressDetailsPanelButton('Send to My Club');
+            domUtility.clickDetailsPanelButton('Send to My Club');
         } catch (error) {
+            commonUtility.logError(error);
+
             try {
-                pressDetailsPanelButton('Redeem');
+                domUtility.clickDetailsPanelButton('Redeem');
             } catch (error) {
-                log(error, true /* isError */);
-                log('Unable to store item in the club.', /* isError */);
+                commonUtility.logError(error);
                 return;
             }
         }
 
-        log('Succesfully stored item in the club.');
+        commonUtility.log('Succesfully stored item in the club.');
     }
 
     /**
-     * Stores all remaining items in the club.
+     * Toggles the current item's status on the "Transfer Targets" list (i.e. adds if
+     * it's not on there already, or removes if it is).
      */
-    function storeAllInClub() {
-        log('Attempting to store remaining items in the club...');
-        let prevItemCount = 0;
+    function toggleTransferTargetStatus() {
+        commonUtility.log(`Attempting to toggle current item's "watched" status...`);
 
-        try {
-            const itemList = document.getElementsByClassName('itemList')[0];
-            const items = Array.from(itemList.getElementsByClassName('listFUTItem'));
-
-            items.forEach(function(item, itemIndex) {
-                setTimeout(() => {
-                    storeInClub();
-                }, itemIndex * getRandomLongerWait());
-            }, this);
-        } catch (error) {
-            log('Unable to store remaining items in club.', true /* isError */);
-        }
-
-        log('Successfully stored remaining items in club.');
-    }
-
-    /**
-     * Lists the current item with a BIN price of 200.
-     */
-    function listMinBin() {
-        log('Attempting to list current item for minimum BIN...');
-
-        try {
-            // Set BIN price to 200.
-            const quickListPanelActions = getQuickListPanelActions();
-
-            const actionRows = quickListPanelActions.getElementsByClassName('panelActionRow');
-
-            const startPriceRow = actionRows[1];
-            const startPriceInput = startPriceRow.getElementsByTagName('input')[0];
-            startPriceInput.value = 150;
-
-            const buyNowRow = actionRows[2];
-            const buyNowInput = buyNowRow.getElementsByTagName('input')[0];
-            buyNowInput.value = 200;
-
-            // Tap "List Item" button.
-            const buttons = quickListPanelActions.getElementsByTagName('button');
-            const listItemButton = buttons[buttons.length - 2];
-            tapElement(listItemButton);
-        } catch (error) {
-            log('Unable to list current item for minimum BIN.', true /* isError */);
+        if (!domUtility.isUserOnPage('Search Results')) {
+            commonUtility.logError(`Not executing "Watch" because we're not on the "Search Results" page.`);
             return;
         }
 
-        log('Successfully listed current item for minimum BIN.');
-    }
-
-    /**
-     * Search for the current item to see what other ones on the market are going for.
-     */
-    function comparePrice() {
-        log('Attempting to search for current item to compare price...');
-
         try {
-            // Tap "Compare Price" button.
-            const quickListPanelActions = getQuickListPanelActions();
-            const buttons = quickListPanelActions.getElementsByTagName('button');
-            const comparePriceButton = buttons[buttons.length - 1];
-            tapElement(comparePriceButton);
+            // Tap "Watch" or "Unwatch" button.
+            domUtility.clickWatchButton();
         } catch (error) {
-            log('Unable to locate "Compare Price" button.', true /* isError */);
+            commonUtility.logError(error);
             return;
         }
 
-        log('Successfully searched for current item.');
-    }
-
-    /**
-     * Gets the quick list panel actions div.
-     */
-    function getQuickListPanelActions() {
-        const quickListPanel = document.getElementsByClassName('QuickListPanel')[0];
-        const quickListPanelActions = quickListPanel.getElementsByClassName('panelActions')[0];
-        return quickListPanelActions;
-    }
-
-    /**
-     * Gets the buttons in the details panel and returns them as an array.
-     */
-    function getDetailsPanelButtons() {
-        const detailsPanel = document.getElementsByClassName('DetailPanel')[0];
-        const detailsPanelButtons = detailsPanel.getElementsByTagName('button');
-        const buttonArray = Array.from(detailsPanelButtons);
-        return buttonArray;
-    }
-
-    /**
-     * Gets "Buy Now" button.
-     */
-    function getBuyNowButton() {
-        const buyNowButton = document.getElementsByClassName('list')[1];
-        return buyNowButton;
-    }
-
-    /**
-     * Checks if user is on specific page, based on the input.
-     *
-     * @param {string} pageTitle
-     */
-    function isSpecificPage(pageTitle){
-        const title = document.getElementById('futHeaderTitle');
-        return title && title.innerHTML === pageTitle;
-    }
-
-    /**
-     * Logs a message to the console with app information.
-     *
-     * @param {string} message
-     * @param {boolean} isError
-     */
-    function log(message, isError) {
-        // Default to info.
-        let logFunction = console.info;
-
-        if (isError) {
-            logFunction = console.error;
-        }
-
-        logFunction(`${APP_NAME}: ${message}`)
-    }
-
-    /**
-     * Simulates a tap/click on an element.
-     *
-     * @param {HTMLElement} element
-     */
-    function tapElement(element) {
-        sendTouchEvent(element, 'touchstart');
-        sendTouchEvent(element, 'touchend');
-    }
-
-    function getRandomWait() {
-        return Math.floor(Math.random() * (300 - 150)) + 150;
-    }
-
-    function getRandomLongerWait() {
-        return Math.floor(Math.random() * (2000 - 1000)) + 1000;
-    }
-
-    /**
-     * Dispatches a touch event on the element.
-     * https://stackoverflow.com/a/42447620
-     *
-     * @param {HTMLElement} element
-     * @param {string} eventType
-     */
-    function sendTouchEvent(element, eventType) {
-        const touchObj = new Touch({
-            identifier: 'Keyboard shortcuts should be supported natively without an extension!',
-            target: element,
-            clientX: 0,
-            clientY: 0,
-            radiusX: 2.5,
-            radiusY: 2.5,
-            rotationAngle: 10,
-            force: 0.5
-        });
-
-        const touchEvent = new TouchEvent(eventType, {
-            cancelable: true,
-            bubbles: true,
-            touches: [touchObj],
-            targetTouches: [touchObj],
-            changedTouches: [touchObj],
-            shiftKey: true
-        });
-
-        element.dispatchEvent(touchEvent);
-    }
-
-    /**
-     * Presses "OK" button in confirmation dialog.
-     */
-    function confirmDialog() {
-        setTimeout(() => {
-            try{
-                const okButton = document.getElementsByClassName('Dialog')[0].getElementsByClassName('btn-flat')[1];
-                tapElement(okButton);
-            } catch (error) {
-                log(error, true /* isError */);
-            }
-        }, getRandomWait());
+        commonUtility.log(`Successfully toggled current item's "watched" status.`);
     }
 })();
