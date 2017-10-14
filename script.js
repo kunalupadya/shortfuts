@@ -42,7 +42,7 @@
                 buyNow();
                 break;
             case 87 /* w */:
-                watchItem();
+                toggleTransferTargetStatus();
                 break;
             default:
                 break;
@@ -201,7 +201,7 @@
         log('Attempting to "Buy Now" currently selected item...');
 
         if (document.getElementsByClassName('SearchResults').length === 0) {
-            log(`Not exeucting "Buy Now" because we're not on the "Search Results" page.`, true /* isError */);
+            log(`Not executing "Buy Now" because we're not on the "Search Results" page.`, true /* isError */);
             return;
         }
 
@@ -222,26 +222,29 @@
 
 
     /**
-     * Watch for the current item.
+     * Toggles the current item's status on the "Transfer Targets" list (i.e. adds if
+     * it's not on there already, or removes if it is).
      */
-    function watchItem() {
-        log('Attempting to watch this item...');
+    function toggleTransferTargetStatus() {
+        log(`Attempting to toggle current item's "watched" status...`);
+
         if (document.getElementsByClassName('SearchResults').length === 0) {
-            log('Not watch because we\'re not on the search results page.');
+            log(`Not executing "Watch" because we're not on the "Search Results" page.`, true /* isError */);
             return;
         }
+
         try {
-            // Tap "Watch" button.
-            const watchButton = document.getElementsByClassName('watch')[0]
+            // Tap "Watch" or "Unwatch" button.
+            const watchButton = document.getElementsByClassName('watch')[0];
             tapElement(watchButton);
         } catch (error) {
             log('Unable to locate "Watch" button.', true /* isError */);
             return;
         }
 
-        log('Successfully watch this card.');
+        log(`Successfully toggled current item's "watched" status.`);
     }
-  
+
     /**
      * Stores all remaining items in the club.
      */
