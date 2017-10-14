@@ -120,13 +120,19 @@
             const isDown = ev.keyCode === 40;
 
             // Get all items.
-            let itemList;
-            if (isSearchResultPage()) {
-                itemList = document.getElementsByClassName('paginated-item-list')[0];
+            let items = [];
+            if (isSpecificPage('Search Results')) {
+                const itemList = document.getElementsByClassName('paginated-item-list')[0];
+                items = Array.from(itemList.getElementsByClassName('listFUTItem'));
+            } else if (isSpecificPage('Transfer List')) {
+                const itemLists = Array.from(document.getElementsByClassName('itemList'));
+                itemLists.forEach(function(itemList) {
+                    items = items.concat(Array.from(itemList.getElementsByClassName('listFUTItem')));
+                }, this);
             } else {
-                itemList = document.getElementsByClassName('itemList')[0];
+                const itemList = document.getElementsByClassName('itemList')[0];
+                items = Array.from(itemList.getElementsByClassName('listFUTItem'));
             }
-            const items = Array.from(itemList.getElementsByClassName('listFUTItem'));
 
             // Get current index.
             let currentIndex = items.findIndex((item) => { return item.className.indexOf('selected') > -1; })
@@ -341,11 +347,13 @@
     }
 
     /**
-     * Determiens if user is currently on the "Search Results" page.
+     * Checks if user is on specific page, based on the input.
+     *
+     * @param {string} pageTitle
      */
-    function isSearchResultPage(){
+    function isSpecificPage(pageTitle){
         const title = document.getElementById('futHeaderTitle');
-        return title && title.innerHTML == 'Search Results';
+        return title && title.innerHTML === pageTitle;
     }
 
     /**
