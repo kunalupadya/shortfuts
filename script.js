@@ -177,13 +177,10 @@
 
     /**
      * Presses a button in the item details panel, based on a given button label.
+     *
+     * @param {string} buttonLabel
      */
     function pressDetailsPanelButton(buttonLabel) {
-        if (navigator.language.indexOf('en') !== 0) {
-            alert(`The "${buttonLabel}" shortcut is only available when the app is in English. Blame EA!`);
-            return;
-        }
-
         log(`Attempting to press "${buttonLabel}" button...`);
 
         try {
