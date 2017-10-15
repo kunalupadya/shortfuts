@@ -2,45 +2,69 @@
     commonUtility.log('Initializing extension...');
 
     window.addEventListener('keydown', function(ev) {
-        const keyCode = ev.keyCode;
+        chrome.storage.sync.get('isActive', function(data) {
+            const keyCode = ev.keyCode;
 
-        switch (keyCode) {
-            case 67 /* c */:
-                comparePrice();
-                break;
-            case 77 /* m */:
-                listMinBin();
-                break;
-            case 83 /* s */:
-                storeInClub();
-                break;
-            case 84 /* t */:
-                sendToTransferList();
-                break;
-            case 81 /* q */:
-                quickSell();
-                break;
-            case 40 /* down arrow */:
-                move(ev);
-                break;
-            case 38 /* up arrow */:
-                move(ev);
-                break;
-            case 8 /* backspace */:
-                goBack();
-                break;
-            case 66 /* b */:
-                buyBronzePack();
-                break;
-            case 220 /* \ */:
-                buyNow();
-                break;
-            case 87 /* w */:
-                toggleTransferTargetStatus();
-                break;
-            default:
-                break;
-        }
+            /**
+             * ALT + s will toggle the extension's availability.
+             */
+            if (ev.altKey && keyCode === 83 /* s */) {
+                chrome.storage.sync.set({ 'isActive': !data.isActive}, function() {
+                    commonUtility.log('Toggled extension availability.');
+                });
+                return;
+            }
+
+            /**
+             * Checks if extension is currently active before responding
+             * to keystroke.
+             */
+            if (data.isActive === false) {
+                return;
+            } else if (data.isActive === undefined) {
+                chrome.storage.sync.set({ 'isActive': true }, function() {
+                    commonUtility.log('Initialized "isActive" setting.');
+                });
+            }
+
+            switch (keyCode) {
+                case 67 /* c */:
+                    comparePrice();
+                    break;
+                case 77 /* m */:
+                    listMinBin();
+                    break;
+                case 83 /* s */:
+                    storeInClub();
+                    break;
+                case 84 /* t */:
+                    sendToTransferList();
+                    break;
+                case 81 /* q */:
+                    quickSell();
+                    break;
+                case 40 /* down arrow */:
+                    move(ev);
+                    break;
+                case 38 /* up arrow */:
+                    move(ev);
+                    break;
+                case 8 /* backspace */:
+                    goBack();
+                    break;
+                case 66 /* b */:
+                    buyBronzePack();
+                    break;
+                case 220 /* \ */:
+                    buyNow();
+                    break;
+                case 87 /* w */:
+                    toggleTransferTargetStatus();
+                    break;
+                default:
+                    break;
+            }
+        });
     });
 
     /**
