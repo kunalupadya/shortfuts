@@ -143,7 +143,9 @@ function getListItems() {
  */
 function goToStoreTab(tab) {
     if (tab === 'Bronze') {
-        const bronzeTabButton = document.getElementsByClassName('TabMenuItem')[2];
+        // Select the last tab, which contain the bronze packs.
+        const packTabButtons = document.getElementsByClassName('TabMenuItem');
+        const bronzeTabButton = packTabButtons[packTabButtons.length - 1];
         _tapElement(bronzeTabButton);
     }
 }
