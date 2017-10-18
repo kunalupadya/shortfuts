@@ -78,6 +78,23 @@ function clickDetailsPanelButton(buttonLabel) {
 }
 
 /**
+ * Clicks the "Search" button.
+ *
+ * TODO: Make this work.
+ */
+function clickSearchButton() {
+    throw 'This shortfut is in development.';
+
+    try {
+        const searchButton = document.getElementsByClassName('btn btn-raised call-to-action')[0];
+        _tapElement(searchButton);
+    } catch (error) {
+        commonUtility.logError(error);
+        throw 'Unable to click "Search" button.';
+    }
+}
+
+/**
  * Clicks "Watch" or "Unwatch" button. Throws if button isn't found
  * or is not available.
  */
@@ -281,6 +298,7 @@ window.domUtility = {
     clickBuyNowButton,
     clickComparePrice,
     clickDetailsPanelButton,
+    clickSearchButton,
     clickWatchButton,
     confirmDialog,
     getCurrentSelectedIndex,

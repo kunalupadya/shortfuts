@@ -29,7 +29,7 @@
 
             switch (keyCode) {
                 case 67 /* c */:
-                    comparePrice();
+                    search();
                     break;
                 case 77 /* m */:
                     listMinBin();
@@ -121,23 +121,6 @@
         }
 
         commonUtility.log('Successfully executed "Buy Now" on selected item.');
-    }
-
-    /**
-     * Search for the current item to see what other ones on the market are going for.
-     */
-    function comparePrice() {
-        commonUtility.log('Attempting to search for current item to compare price...');
-
-        try {
-            // Tap "Compare Price" button.
-            domUtility.clickComparePrice();
-        } catch (error) {
-            commonUtility.logError('Unable to click "Compare Price" button.');
-            return;
-        }
-
-        commonUtility.log('Successfully searched for current item.');
     }
 
     /**
@@ -236,6 +219,30 @@
         }
 
         commonUtility.log('Successfully quick sold the current item.');
+    }
+
+    /**
+     * Tries to search. If we're on the "Search the Transfer Market" page,
+     * click the "Search" button. Otherwise, click "Compare Price".
+     */
+    function search() {
+        commonUtility.log('Attempting to search for current item to compare price...');
+
+        try {
+            if (domUtility.isUserOnPage('Search the Transfer Market')) {
+                // Tap "Search" button.
+                domUtility.clickSearchButton();
+            } else {
+                // Tap "Compare Price" button.
+                domUtility.clickComparePrice();
+            }
+        } catch (error) {
+            commonUtility.logError(error);
+            commonUtility.logError('Unable to search.');
+            return;
+        }
+
+        commonUtility.log('Successfully searched for current item.');
     }
 
     /**
