@@ -62,6 +62,8 @@
                 case 87 /* w */:
                     toggleTransferTargetStatus();
                     break;
+                case 76 /* l */:
+                    listItem();
                 default:
                     break;
             }
@@ -147,6 +149,24 @@
         }
 
         commonUtility.log('Successfully went back.');
+    }
+
+    /**
+     * Lists the current item with whatever minimum and "buy now" prices
+     * are currently set.
+     */
+    function listItem() {
+        commonUtility.log('Trying to list the current item...');
+
+        try {
+            domUtility.clickDetailsPanelButton('List Item');
+        } catch (error) {
+            commonUtility.logError(error);
+            commonUtility.logError('Unable to list the current item.');
+            return;
+        }
+
+        commonUtility.log('Successfully listed current item.');
     }
 
     /**
