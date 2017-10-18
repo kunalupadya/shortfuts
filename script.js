@@ -55,6 +55,7 @@
                 case 66 /* b */:
                     buyBronzePack();
                     break;
+                case 78 /* n */:
                 case 220 /* \ */:
                     buyNow();
                     break;

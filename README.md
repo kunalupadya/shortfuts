@@ -7,7 +7,7 @@
 ![Demo of shortfuts](https://raw.githubusercontent.com/martellaj/shortfuts/master/demo.gif)
 
 ## Currently supported shortcuts
-* **\\** - Executes "Buy Now" on the current item (on "Search Results" page).
+* **\\** or **n** - Executes "Buy Now" on the current item (on "Search Results" page).
 * **ALT + s** - Toggles the extension on and off.
 * **b** - Buys a regular bronze pack (400 tokens).
 * **backspace** - Quickly go from the "Search Results" page back to the "Unassigned" page.
