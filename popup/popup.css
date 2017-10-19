@@ -17,6 +17,8 @@ body {
 #shortcut-list {
     margin-top: 4px;
     padding-left: 24px;
+    max-height: 200px;
+    overflow-y: scroll;
 }
 
 .shortfuts-hr {

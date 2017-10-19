@@ -27,6 +27,10 @@
         },
         "default_popup": "popup/popup.html"
     },
+    "background": {
+        "scripts": ["eventPage.js"],
+        "persistent": false
+    },
     "permissions": [
         "storage"
     ]

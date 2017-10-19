@@ -5,12 +5,16 @@
         chrome.storage.sync.get('isActive', function(data) {
             const keyCode = ev.keyCode;
 
+            chrome.runtime.sendMessage({ isActive: data.isActive });
+
             /**
              * ALT + s will toggle the extension's availability.
              */
             if (ev.altKey && keyCode === 83 /* s */) {
-                chrome.storage.sync.set({ 'isActive': !data.isActive}, function() {
+                const newState = !data.isActive;
+                chrome.storage.sync.set({ 'isActive': newState}, function() {
                     commonUtility.log('Toggled extension availability.');
+                    chrome.runtime.sendMessage({ isActive: newState });
                 });
                 return;
             }
