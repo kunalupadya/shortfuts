@@ -68,6 +68,8 @@
                     break;
                 case 76 /* l */:
                     listItem();
+                case 49 /* 1 */:
+                    commonUtility.collectLogs();
                 default:
                     break;
             }
