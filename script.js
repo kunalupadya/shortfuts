@@ -107,6 +107,7 @@
         }
 
         commonUtility.log('Successfully bought a bronze pack.');
+        chrome.runtime.sendMessage({ trackBuyBronzePack: true });
     }
 
     /**
@@ -132,6 +133,7 @@
         }
 
         commonUtility.log('Successfully executed "Buy Now" on selected item.');
+        chrome.runtime.sendMessage({ trackBuyNow: true });
     }
 
     /**
@@ -175,6 +177,7 @@
         }
 
         commonUtility.log('Successfully listed current item.');
+        chrome.runtime.sendMessage({ trackListItem: true });
     }
 
     /**
@@ -191,6 +194,7 @@
         }
 
         commonUtility.log('Successfully listed current item for minimum BIN.');
+        chrome.runtime.sendMessage({ trackListMinBin: true });
     }
 
     /**
@@ -248,6 +252,7 @@
         }
 
         commonUtility.log('Successfully quick sold the current item.');
+        chrome.runtime.sendMessage({ trackQuickSell: true });
     }
 
     /**
@@ -261,9 +266,11 @@
             if (domUtility.isUserOnPage('Search the Transfer Market')) {
                 // Tap "Search" button.
                 domUtility.clickSearchButton();
+                chrome.runtime.sendMessage({ trackSearch: true });
             } else {
                 // Tap "Compare Price" button.
                 domUtility.clickComparePrice();
+                chrome.runtime.sendMessage({ trackComparePrice: true });
             }
         } catch (error) {
             commonUtility.logError(error);
@@ -287,6 +294,7 @@
         }
 
         commonUtility.log('Successfully sent current item to transfer list.');
+        chrome.runtime.sendMessage({ trackSendToTransferList: true });
     }
 
     /**
@@ -310,6 +318,7 @@
         }
 
         commonUtility.log('Succesfully stored item in the club.');
+        chrome.runtime.sendMessage({ trackStoreInClub: true });
     }
 
     /**
