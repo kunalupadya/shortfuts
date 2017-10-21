@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.4.1 - 10/21/2017
+### Added
+- Added support for "watch" shortfut on "Transfer Targets" page
+
 ## 2.4.0 - 10/20/2017
 ### Added
 - Added telemetry for all shortfuts
