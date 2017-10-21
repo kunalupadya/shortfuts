@@ -328,8 +328,8 @@
     function toggleTransferTargetStatus() {
         commonUtility.log(`Attempting to toggle current item's "watched" status...`);
 
-        if (!domUtility.isUserOnPage('Search Results')) {
-            commonUtility.logError(`Not executing "Watch" because we're not on the "Search Results" page.`);
+        if (!domUtility.isUserOnPage('Search Results') && !domUtility.isUserOnPage('Transfer Targets')) {
+            commonUtility.logError(`Not executing "Watch" because we're not on a supported page.`);
             return;
         }
 
