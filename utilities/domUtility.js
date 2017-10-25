@@ -27,7 +27,7 @@ function clickBronzePackButton() {
  * Clicks "Buy Now" button.
  */
 function clickBuyNowButton() {
-    const buyNowButton = document.getElementsByClassName('list')[1];
+    const buyNowButton = document.getElementsByClassName('buyButton')[0];
 
     if (buyNowButton) {
         _tapElement(buyNowButton);
