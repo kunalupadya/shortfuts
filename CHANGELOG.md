@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.4.2 - 10/25/2017
+### Fixed
+- Fixed broken "buy now" shortfut (due to EA patching web app)
+
 ## 2.4.1 - 10/21/2017
 ### Added
 - Added support for "watch" shortfut on "Transfer Targets" page
