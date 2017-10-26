@@ -46,7 +46,14 @@ function clickComparePrice() {
         const comparePriceButton = buttons[buttons.length - 1];
         _tapElement(comparePriceButton);
     } catch (error) {
-        throw 'Unable to click "Compare Price" button.';
+        try {
+            const detailsPanel = document.getElementsByClassName('DetailPanel')[0];
+            const buttonList = detailsPanel.getElementsByTagName('ul')[0];
+            const buttons = Array.from(buttonList.getElementsByTagName('button'));
+            _tapElement(buttons[buttons.length - 1]);
+        } catch (error) {
+            throw 'Unable to click "Compare Price" button.';
+        }
     }
 }
 

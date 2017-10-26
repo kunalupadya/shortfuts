@@ -33,7 +33,7 @@
 
             switch (keyCode) {
                 case 67 /* c */:
-                    search();
+                    comparePrice();
                     break;
                 case 77 /* m */:
                     listMinBin();
@@ -134,6 +134,26 @@
 
         commonUtility.log('Successfully executed "Buy Now" on selected item.');
         chrome.runtime.sendMessage({ trackBuyNow: true });
+    }
+
+    /**
+     * Clicks "Compare Price" so the user can compare the price of other
+     * like items on the market to the one that is selected.
+     */
+    function comparePrice() {
+        commonUtility.log('Attempting to compare price of other items on the market like the current item...');
+
+        try {
+            // Tap "Compare Price" button.
+            domUtility.clickComparePrice();
+        } catch (error) {
+            commonUtility.logError(error);
+            commonUtility.logError('Unable to compare price.');
+            return;
+        }
+
+        chrome.runtime.sendMessage({ trackComparePrice: true });
+        commonUtility.log('Successfully compared the price of the current item to other items on the market.');
     }
 
     /**
@@ -253,32 +273,6 @@
 
         commonUtility.log('Successfully quick sold the current item.');
         chrome.runtime.sendMessage({ trackQuickSell: true });
-    }
-
-    /**
-     * Tries to search. If we're on the "Search the Transfer Market" page,
-     * click the "Search" button. Otherwise, click "Compare Price".
-     */
-    function search() {
-        commonUtility.log('Attempting to search for current item to compare price...');
-
-        try {
-            if (domUtility.isUserOnPage('Search the Transfer Market')) {
-                // Tap "Search" button.
-                domUtility.clickSearchButton();
-                chrome.runtime.sendMessage({ trackSearch: true });
-            } else {
-                // Tap "Compare Price" button.
-                domUtility.clickComparePrice();
-                chrome.runtime.sendMessage({ trackComparePrice: true });
-            }
-        } catch (error) {
-            commonUtility.logError(error);
-            commonUtility.logError('Unable to search.');
-            return;
-        }
-
-        commonUtility.log('Successfully searched for current item.');
     }
 
     /**
