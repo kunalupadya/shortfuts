@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.4.4 - 10/25/2017
+### Fixed
+- Fixed broken "compare price" on "Search Results" page
+
+### Changed
+- Reworked how "compare price" code is structured
+
 ## 2.4.3 - 10/25/2017
 ### Added
 - Added a Twitter account to follow for updates or report bugs to
