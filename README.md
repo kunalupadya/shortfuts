@@ -12,6 +12,7 @@
 * **b** - Buys a regular bronze pack (400 tokens).
 * **backspace** - Quickly go from the "Search Results" page back to the "Unassigned" page.
 * **c** - Gets search results for other listings of the current item so you can compare prices.
+* **f** - Gets Futbin data for currently selected item.
 * **l** - Lists the selected item (using whatever values are set for minimum and "buy now" price).
 * **m** - Lists the selected item for min BIN (200 tokens).
 * **q** - Quick sells the current item.

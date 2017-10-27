@@ -11,6 +11,10 @@ and this project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Reworked how "compare price" code is structured
 
+## 2.5.0 - 10/26/2017
+### Added
+- Added Futbin data display (sick feature)
+
 ## 2.4.3 - 10/25/2017
 ### Added
 - Added a Twitter account to follow for updates or report bugs to
