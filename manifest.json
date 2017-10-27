@@ -8,7 +8,7 @@
         "48": "icon.png",
        "128": "icon.png"
     },
-    "version": "2.5.2",
+    "version": "2.5.4",
     "content_scripts": [
         {
             "matches": ["https://www.easports.com/*fifa/ultimate-team/web-app/*", "http://www.easports.com/*fifa/ultimate-team/web-app/*"],
@@ -32,7 +32,9 @@
         "persistent": false
     },
     "permissions": [
-        "storage"
+        "storage",
+        "https://www.futbin.com/",
+        "http://www.futbin.com/"
     ],
     "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'"
 }

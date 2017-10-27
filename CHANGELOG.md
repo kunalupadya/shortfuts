@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.5.4 - 10/27/2017
+### Fixed
+- Fixed bug where CORS was stopping Futbin request
+
 ## 2.5.2 - 10/26/2017
 ### Fixed
 - Fixed bug where 0 price value would break parsing
