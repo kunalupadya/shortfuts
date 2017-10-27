@@ -162,7 +162,7 @@ function getListItems() {
     if (isUserOnPage('Search Results')) {
         const itemList = document.getElementsByClassName('paginated-item-list')[0];
         items = Array.from(itemList.getElementsByClassName('listFUTItem'));
-    } else if (isUserOnPage('Transfer List')) {
+    } else if (isUserOnPage('Transfer List') || isUserOnPage('Unassigned')) {
         const itemLists = Array.from(document.getElementsByClassName('itemList'));
         itemLists.forEach(function(itemList) {
             items = items.concat(Array.from(itemList.getElementsByClassName('listFUTItem')));

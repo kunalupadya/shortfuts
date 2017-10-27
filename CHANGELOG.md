@@ -4,16 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.5.1 - 10/26/2017
+### Fixed
+- Fixed bug where you couldn't move between unassigned items and duplicates properly
+
+## 2.5.0 - 10/26/2017
+### Added
+- Added Futbin data display (sick feature)
+
 ## 2.4.4 - 10/25/2017
 ### Fixed
 - Fixed broken "compare price" on "Search Results" page
 
 ### Changed
 - Reworked how "compare price" code is structured
-
-## 2.5.0 - 10/26/2017
-### Added
-- Added Futbin data display (sick feature)
 
 ## 2.4.3 - 10/25/2017
 ### Added
