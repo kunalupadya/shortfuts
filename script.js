@@ -166,52 +166,68 @@
     function getFutbinData() {
         chrome.runtime.sendMessage({ trackFutbin: true });
 
-        // Get all items.
-        let items = domUtility.getListItems();
+        try {
+            // Get all items.
+            let items = domUtility.getListItems();
 
-        // Get current index.
-        let currentIndex = domUtility.getCurrentSelectedIndex(items);
+            // Get current index.
+            let currentIndex = domUtility.getCurrentSelectedIndex(items);
 
-        // Get the ID of the object.
-        const id = domUtility.getItemId(items[currentIndex]);
+            // Get the ID of the object.
+            const id = domUtility.getItemId(items[currentIndex]);
 
-        // Fire request to Futbin to get price data.
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://www.futbin.com/18/playerPrices?player=' + id, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4) {
-                const response = JSON.parse(xhr.responseText);
+            // Fire request to Futbin to get price data.
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://www.futbin.com/18/playerPrices?player=' + id, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
 
-                // Get host panel where we will add our stuff.
-                const panel = document.getElementsByClassName('slick-slide slick-current slick-active')[0];
+                        // Get host panel where we will add our stuff.
+                        const panel = document.getElementsByClassName('slick-slide slick-current slick-active')[0];
 
-                // Clear "old" div, if it exists.
-                const oldDiv = document.getElementById('shortfuts-div');
-                if (oldDiv) {
-                    panel.removeChild(oldDiv);
-                }
+                        // Clear "old" div, if it exists.
+                        const oldDiv = document.getElementById('shortfuts-div');
+                        if (oldDiv) {
+                            panel.removeChild(oldDiv);
+                        }
 
-                // Ensures that the response from Futbin has the price data.
-                if (response[id].prices) {
-                    const xboxSpan = _getPlatformAverageLowestBinSpan(response[id].prices, 'Xbox');
-                    const psSpan = _getPlatformAverageLowestBinSpan(response[id].prices, 'PS');
-                    const pcSpan = _getPlatformAverageLowestBinSpan(response[id].prices, 'PC');
+                        // Ensures that the response from Futbin has the price data.
+                        if (response[id].prices) {
+                            const xboxSpan = _getPlatformAverageLowestBinSpan(response[id].prices, 'Xbox');
+                            const psSpan = _getPlatformAverageLowestBinSpan(response[id].prices, 'PS');
+                            const pcSpan = _getPlatformAverageLowestBinSpan(response[id].prices, 'PC');
 
-                    const div = document.createElement('div');
-                    div.id = 'shortfuts-div';
+                            const div = document.createElement('div');
+                            div.id = 'shortfuts-div';
 
-                    div.appendChild(xboxSpan);
-                    div.appendChild(psSpan);
-                    div.appendChild(pcSpan);
+                            div.appendChild(xboxSpan);
+                            div.appendChild(psSpan);
+                            div.appendChild(pcSpan);
 
-                    // Add small timeout for visual indicator.
-                    setTimeout(() => {
-                        panel.prepend(div);
-                    }, 100);
+                            // Add small timeout for visual indicator.
+                            setTimeout(() => {
+                                panel.prepend(div);
+                            }, 100);
+                        }
+                    } catch (error) {
+                        commonUtility.logError(error);
+                        commonUtility.logError('Unable to get Futbin data.');
+                    }
                 }
             }
+            xhr.send();
+        } catch (error) {
+            // Get host panel where we will add our stuff.
+            const panel = document.getElementsByClassName('slick-slide slick-current slick-active')[0];
+
+            // Clear "old" div, if it exists.
+            const oldDiv = document.getElementById('shortfuts-div');
+            if (oldDiv) {
+                panel.removeChild(oldDiv);
+            }
         }
-        xhr.send();
     }
 
     /**
@@ -419,7 +435,7 @@
         let platformTotal = 0;
         for (const prop in platform) {
             if (prop.toLowerCase().indexOf('lcprice') > -1) {
-                const price = parseInt(platform[prop]);
+                const price = parseInt(platform[prop].replace(',', ''));
                 if (price > 0) {
                     platformIt++;
                     platformTotal += price;
