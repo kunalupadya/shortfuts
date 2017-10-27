@@ -435,7 +435,7 @@
         let platformTotal = 0;
         for (const prop in platform) {
             if (prop.toLowerCase().indexOf('lcprice') > -1) {
-                const price = parseInt(platform[prop].replace(',', ''));
+                const price = platform[prop] && parseInt(platform[prop].replace(',', ''));
                 if (price > 0) {
                     platformIt++;
                     platformTotal += price;
