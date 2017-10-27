@@ -7,6 +7,7 @@ and this project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.
 ## 2.5.1 - 10/26/2017
 ### Fixed
 - Fixed bug where you couldn't move between unassigned items and duplicates properly
+- Fixed bug where commas in BIN prices would break parsing
 
 ## 2.5.0 - 10/26/2017
 ### Added
