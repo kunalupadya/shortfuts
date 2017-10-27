@@ -138,6 +138,22 @@ function getCurrentSelectedIndex(items) {
 }
 
 /**
+ * Gets the ID of the element so we can find its price.
+ *
+ * @param {HTMLElement} item
+ */
+function getItemId(item) {
+    try {
+        const imageSrc = item.getElementsByClassName('photo')[0].currentSrc;
+        const lastIndexOfSlash = imageSrc.lastIndexOf('/');
+        const id = imageSrc.substring(lastIndexOfSlash + 1, imageSrc.length - 4);
+        return id;
+    } catch (error) {
+        throw 'Unable to get item ID.';
+    }
+}
+
+/**
  * Gets list items on the page.
  */
 function getListItems() {
@@ -309,6 +325,7 @@ window.domUtility = {
     clickWatchButton,
     confirmDialog,
     getCurrentSelectedIndex,
+    getItemId,
     getListItems,
     goToStoreTab,
     isUserOnPage,

@@ -27,5 +27,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         _gaq.push(['_trackEvent', 'telemetry', 'sendToTransferList']);
     } else if (request.trackStoreInClub) {
         _gaq.push(['_trackEvent', 'telemetry', 'storeInClub']);
+    } else if (request.trackFutbin) {
+        _gaq.push(['_trackEvent', 'telemetry', 'futbin']);
     }
 });

@@ -68,10 +68,14 @@
                     break;
                 case 76 /* l */:
                     listItem();
+                    break;
                 case 49 /* 1 */:
                     if (ev.altKey) {
                         commonUtility.collectLogs();
                     }
+                    break;
+                case 70 /* f */:
+                    getFutbinData();
                 default:
                     break;
             }
@@ -154,6 +158,60 @@
 
         chrome.runtime.sendMessage({ trackComparePrice: true });
         commonUtility.log('Successfully compared the price of the current item to other items on the market.');
+    }
+
+    /**
+     * Displays Futbin data for currently selected item.
+     */
+    function getFutbinData() {
+        chrome.runtime.sendMessage({ trackFutbin: true });
+
+        // Get all items.
+        let items = domUtility.getListItems();
+
+        // Get current index.
+        let currentIndex = domUtility.getCurrentSelectedIndex(items);
+
+        // Get the ID of the object.
+        const id = domUtility.getItemId(items[currentIndex]);
+
+        // Fire request to Futbin to get price data.
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://www.futbin.com/18/playerPrices?player=' + id, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4) {
+                const response = JSON.parse(xhr.responseText);
+
+                // Get host panel where we will add our stuff.
+                const panel = document.getElementsByClassName('slick-slide slick-current slick-active')[0];
+
+                // Clear "old" div, if it exists.
+                const oldDiv = document.getElementById('shortfuts-div');
+                if (oldDiv) {
+                    panel.removeChild(oldDiv);
+                }
+
+                // Ensures that the response from Futbin has the price data.
+                if (response[id].prices) {
+                    const xboxSpan = _getPlatformAverageLowestBinSpan(response[id].prices, 'Xbox');
+                    const psSpan = _getPlatformAverageLowestBinSpan(response[id].prices, 'PS');
+                    const pcSpan = _getPlatformAverageLowestBinSpan(response[id].prices, 'PC');
+
+                    const div = document.createElement('div');
+                    div.id = 'shortfuts-div';
+
+                    div.appendChild(xboxSpan);
+                    div.appendChild(psSpan);
+                    div.appendChild(pcSpan);
+
+                    // Add small timeout for visual indicator.
+                    setTimeout(() => {
+                        panel.prepend(div);
+                    }, 100);
+                }
+            }
+        }
+        xhr.send();
     }
 
     /**
@@ -244,6 +302,7 @@
             return;
         }
 
+        getFutbinData();
         commonUtility.log('Successfully changed the currently selected item.');
     }
 
@@ -336,5 +395,53 @@
         }
 
         commonUtility.log(`Successfully toggled current item's "watched" status.`);
+    }
+
+    /**
+     * Gets a span with the average lowest BIN for the given platform.
+     *
+     * @param {any} prices The "prices" data from the Futbin response.
+     * @param {string} platformKey "Xbox", "PS", "PC"
+     */
+    function _getPlatformAverageLowestBinSpan(prices, platformKey) {
+        // Determine platform based on key.
+        let platform;
+        if (platformKey === 'Xbox') {
+            platform = prices.xbox;
+        } else if (platformKey === 'PS') {
+            platform = prices.ps;
+        } else if (platformKey === 'PC') {
+            platform = prices.pc;
+        }
+
+        // Iterate over response to get BIN values.
+        let platformIt = 0;
+        let platformTotal = 0;
+        for (const prop in platform) {
+            if (prop.toLowerCase().indexOf('lcprice') > -1) {
+                const price = parseInt(platform[prop]);
+                if (price > 0) {
+                    platformIt++;
+                    platformTotal += price;
+                }
+            }
+        }
+
+        // Calculate the average.
+        const platformAverage = parseInt(platformTotal / platformIt);
+
+        /**
+         * If average is greater than zero (aka it's a number),
+         * then return an element with its value. Otherwise, return
+         * an empty span.
+         */
+        if (platformAverage > 0) {
+            // Create and return a div element.
+            const platformAverageSpan = document.createElement('div');
+            platformAverageSpan.textContent = `${platformKey}: ${platformAverage}`;
+            return platformAverageSpan;
+        } else {
+            return document.createElement('span');
+        }
     }
 })();
