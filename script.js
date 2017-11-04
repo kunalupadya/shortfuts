@@ -161,7 +161,7 @@
     }
 
     /**
-     * Displays Futbin data for currently selected item.
+     * Displays FUTBIN data for currently selected item.
      */
     function getFutbinData() {
         chrome.runtime.sendMessage({ trackFutbin: true });
@@ -176,7 +176,7 @@
             // Get the ID of the object.
             const id = domUtility.getItemId(items[currentIndex]);
 
-            // Fire request to Futbin to get price data.
+            // Fire request to FUTBIN to get price data.
             const xhr = new XMLHttpRequest();
             xhr.open('GET', 'https://www.futbin.com/18/playerPrices?player=' + id, true);
             xhr.onreadystatechange = function() {
@@ -193,7 +193,7 @@
                             panel.removeChild(oldDiv);
                         }
 
-                        // Ensures that the response from Futbin has the price data.
+                        // Ensures that the response from FUTBIN has the price data.
                         if (response[id].prices) {
                             const xboxSpan = _getPlatformAverageLowestBinSpan(response[id].prices, 'Xbox');
                             const psSpan = _getPlatformAverageLowestBinSpan(response[id].prices, 'PS');
@@ -213,7 +213,7 @@
                         }
                     } catch (error) {
                         commonUtility.logError(error);
-                        commonUtility.logError('Unable to get Futbin data.');
+                        commonUtility.logError('Unable to get FUTBIN data.');
                     }
                 }
             }
@@ -416,7 +416,7 @@
     /**
      * Gets a span with the average lowest BIN for the given platform.
      *
-     * @param {any} prices The "prices" data from the Futbin response.
+     * @param {any} prices The "prices" data from the FUTBIN response.
      * @param {string} platformKey "Xbox", "PS", "PC"
      */
     function _getPlatformAverageLowestBinSpan(prices, platformKey) {

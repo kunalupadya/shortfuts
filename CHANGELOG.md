@@ -6,7 +6,7 @@ and this project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.
 
 ## 2.5.4 - 10/27/2017
 ### Fixed
-- Fixed bug where CORS was stopping Futbin request
+- Fixed bug where CORS was stopping FUTBIN request
 
 ## 2.5.2 - 10/26/2017
 ### Fixed
@@ -19,7 +19,7 @@ and this project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.
 
 ## 2.5.0 - 10/26/2017
 ### Added
-- Added Futbin data display (sick feature)
+- Added FUTBIN data display (sick feature)
 
 ## 2.4.4 - 10/25/2017
 ### Fixed
