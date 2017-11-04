@@ -167,6 +167,15 @@
         chrome.runtime.sendMessage({ trackFutbin: true });
 
         try {
+            // Get host panel where we will add our stuff.
+            const panel = document.getElementsByClassName('slick-slide slick-current slick-active')[0];
+
+            // Clear "old" div, if it exists.
+            const oldDiv = document.getElementById('shortfuts-div');
+            if (oldDiv) {
+                panel.removeChild(oldDiv);
+            }
+
             // Get all items.
             let items = domUtility.getListItems();
 
@@ -176,6 +185,30 @@
             // Get the ID of the object.
             const id = domUtility.getItemId(items[currentIndex]);
 
+            // Determine if item is a TOTW player.
+            const isTotw = domUtility.isTotwPlayer(items[currentIndex]);
+
+            /**
+             * Unable to get TOTW prices, so just put that message up instead
+             * of showing NIF prices.
+             */
+            if (isTotw) {
+                const totwSpan = document.createElement('div');
+                totwSpan.textContent = `Please check FUTBIN directly for IF prices.`;
+
+                const div = document.createElement('div');
+                div.id = 'shortfuts-div';
+
+                div.appendChild(totwSpan);
+
+                // Add small timeout for visual indicator.
+                setTimeout(() => {
+                    panel.prepend(div);
+                }, 100);
+
+                return;
+            }
+
             // Fire request to FUTBIN to get price data.
             const xhr = new XMLHttpRequest();
             xhr.open('GET', 'https://www.futbin.com/18/playerPrices?player=' + id, true);
@@ -183,15 +216,6 @@
                 if (xhr.readyState == 4) {
                     try {
                         const response = JSON.parse(xhr.responseText);
-
-                        // Get host panel where we will add our stuff.
-                        const panel = document.getElementsByClassName('slick-slide slick-current slick-active')[0];
-
-                        // Clear "old" div, if it exists.
-                        const oldDiv = document.getElementById('shortfuts-div');
-                        if (oldDiv) {
-                            panel.removeChild(oldDiv);
-                        }
 
                         // Ensures that the response from FUTBIN has the price data.
                         if (response[id].prices) {
@@ -299,6 +323,13 @@
     function move(ev) {
         commonUtility.log('Attempting to change the currently selected item...');
 
+        // Clear FUTBIN data div, if it exists.
+        const panel = document.getElementsByClassName('slick-slide slick-current slick-active')[0];
+        const oldDiv = document.getElementById('shortfuts-div');
+        if (oldDiv) {
+            panel.removeChild(oldDiv);
+        }
+
         try {
             const isDown = ev.keyCode === 40;
 
@@ -318,7 +349,6 @@
             return;
         }
 
-        getFutbinData();
         commonUtility.log('Successfully changed the currently selected item.');
     }
 
@@ -435,7 +465,7 @@
         let platformTotal = 0;
         for (const prop in platform) {
             if (prop.toLowerCase().indexOf('lcprice') > -1) {
-                const price = platform[prop] && parseInt(platform[prop].replace(',', ''));
+                const price = platform[prop] && parseInt(platform[prop].replace(/,/g, ''));
                 if (price > 0) {
                     platformIt++;
                     platformTotal += price;

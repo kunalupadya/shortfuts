@@ -191,6 +191,20 @@ function goToStoreTab(tab) {
 }
 
 /**
+ * Determines if item is a TOTW player
+ *
+ * @param {HTMLElement} item
+ */
+function isTotwPlayer(item) {
+    try {
+        const isTotw = !!item.getElementsByClassName('TOTW')[0];
+        return isTotw
+    } catch (error) {
+        throw 'Unable to determine if player is TOTW.';
+    }
+}
+
+/**
  * Checks if user is on specific page, based on the input.
  *
  * @param {string} pageTitle
@@ -328,6 +342,7 @@ window.domUtility = {
     getItemId,
     getListItems,
     goToStoreTab,
+    isTotwPlayer,
     isUserOnPage,
     listItem,
     selectNextItem,
