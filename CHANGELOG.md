@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.5.5 - 11/4/2017
+# Changed
+- Getting FUTBIN data requires explicit action, instead of on arrowing between players
+
+### Fixed
+- Fixed issue where you were unable to arrow between players in your club
+- Fixed issue where we'd show NIF player prices for IF players
+- Fixed issue where we'd show wrong FUTBIN data for player prices over 1 million
+- Fixed styling of "FUTBIN"
+
 ## 2.5.4 - 10/27/2017
 ### Fixed
 - Fixed bug where CORS was stopping FUTBIN request
