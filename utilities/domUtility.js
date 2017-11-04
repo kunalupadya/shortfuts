@@ -159,7 +159,7 @@ function getItemId(item) {
 function getListItems() {
     let items = [];
 
-    if (isUserOnPage('Search Results')) {
+    if (isUserOnPage('Search Results') || isUserOnPage('Players')) {
         const itemList = document.getElementsByClassName('paginated-item-list')[0];
         items = Array.from(itemList.getElementsByClassName('listFUTItem'));
     } else if (isUserOnPage('Transfer List') || isUserOnPage('Unassigned')) {
