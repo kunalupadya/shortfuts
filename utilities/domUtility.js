@@ -233,9 +233,17 @@ function listItem(startingPrice, binPrice) {
     const binInput = binRow.getElementsByTagName('input')[0];
     binInput.value = binPrice;
 
-    // Tap "List Item" button.
+    // Get all buttons in "List on Transfer Market" section.
     const buttons = quickListPanelActions.getElementsByTagName('button');
-    const listItemButton = buttons[buttons.length - 2];
+
+    // Find button with "List Item" as text and tap it.
+    let listItemButton;
+    for (button of buttons) {
+        if (button && button.innerHTML === 'List Item') {
+            listItemButton = button;
+        }
+    }
+
     _tapElement(listItemButton);
 }
 
