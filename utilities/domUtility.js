@@ -41,19 +41,15 @@ function clickBuyNowButton() {
  */
 function clickComparePrice() {
     try {
-        const quickListPanelActions = _getQuickListPanelActions();
-        const buttons = quickListPanelActions.getElementsByTagName('button');
-        const comparePriceButton = buttons[buttons.length - 1];
-        _tapElement(comparePriceButton);
-    } catch (error) {
-        try {
-            const detailsPanel = document.getElementsByClassName('DetailPanel')[0];
-            const buttonList = detailsPanel.getElementsByTagName('ul')[0];
-            const buttons = Array.from(buttonList.getElementsByTagName('button'));
-            _tapElement(buttons[buttons.length - 1]);
-        } catch (error) {
-            throw 'Unable to click "Compare Price" button.';
+        const buttons = document.getElementsByTagName('button');
+        for (button of buttons) {
+            if (button && button.innerHTML && button.innerHTML.indexOf('Compare Price') > -1) {
+                _tapElement(button);
+                return;
+            }
         }
+    } catch (error) {
+        throw 'Unable to click "Compare Price" button.';
     }
 }
 
