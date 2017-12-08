@@ -4,8 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.5.6 - 12/7/2017
+### Fixed
+- Fixed a few shortcuts that were broken due to a web app update
+
 ## 2.5.5 - 11/4/2017
-# Changed
+### Changed
 - Getting FUTBIN data requires explicit action, instead of on arrowing between players
 
 ### Fixed
