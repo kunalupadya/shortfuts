@@ -81,7 +81,7 @@ function clickDetailsPanelButton(buttonLabel) {
 
                         // Click target button.
                         _tapElement(_button);
-                    }, commonUtility.getRandomWait());
+                    }, 1000);
 
                     return;
                 }
