@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.5.7 - 12/10/2017
+### Fixed
+- Fixed "List Item" shortcut by extending wait time
+
 ## 2.5.6 - 12/7/2017
 ### Fixed
 - Fixed a few shortcuts that were broken due to a web app update
