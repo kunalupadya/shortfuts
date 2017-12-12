@@ -41,7 +41,8 @@ function clickBuyNowButton() {
  */
 function clickComparePrice() {
     try {
-        const buttons = document.getElementsByTagName('button');
+        const _buttons = document.getElementsByTagName('button');
+        const buttons = Array.from(_buttons);
         for (button of buttons) {
             if (button && button.innerHTML && button.innerHTML.indexOf('Compare Price') > -1) {
                 _tapElement(button);
@@ -65,7 +66,8 @@ function clickDetailsPanelButton(buttonLabel) {
     try {
         // Expand "List on Transfer Market" section.
         if (buttonLabel === 'List Item') {
-            const buttons = document.getElementsByTagName('button');
+            const _buttons = document.getElementsByTagName('button');
+            const buttons = Array.from(_buttons);
             for (button of buttons) {
                 if (button && button.innerHTML.indexOf('List on Transfer Market') > -1) {
                     _tapElement(button);
@@ -255,7 +257,8 @@ function listItem(startingPrice, binPrice) {
     binInput.value = binPrice;
 
     // Get all buttons in "List on Transfer Market" section.
-    const buttons = quickListPanelActions.getElementsByTagName('button');
+    const _buttons = quickListPanelActions.getElementsByTagName('button');
+    const buttons = Array.from(_buttons);
 
     // Find button with "List Item" as text and tap it.
     let listItemButton;
