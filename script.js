@@ -35,18 +35,24 @@
                 case 67 /* c */:
                     comparePrice();
                     break;
-                case 77 /* m */:
-                    listMinBin();
+                case 98 /* numpad 2 */:
+                    searchToSnipeDown();
                     break;
+                case 104 /* numpad 8 */:
+                    searchToSnipeUp();
+                    break;
+                // case 77 /* m */:
+                //     listMinBin();
+                //     break;
                 case 83 /* s */:
                     storeInClub();
                     break;
                 case 84 /* t */:
                     sendToTransferList();
                     break;
-                case 81 /* q */:
-                    quickSell();
-                    break;
+                // case 81 /* q */:
+                //     quickSell();
+                //     break;
                 case 40 /* down arrow */:
                     move(ev);
                     break;
@@ -56,11 +62,7 @@
                 case 8 /* backspace */:
                     goBack();
                     break;
-                case 66 /* b */:
-                    buyBronzePack();
-                    break;
-                case 78 /* n */:
-                case 220 /* \ */:
+                case 107 /* + */:
                     buyNow();
                     break;
                 case 87 /* w */:
@@ -81,6 +83,70 @@
             }
         });
     });
+
+    /**
+     * Search to snipe up
+     */
+    function searchToSnipeUp() {
+        commonUtility.log('Attempting to search to snipe up...');
+
+        try {
+            // Only execute this shortcut if in the "Search the Transfer Market" tab.
+            if (!domUtility.isUserOnPage('Search the Transfer Market')) {
+                commonUtility.logError('Not on Search the Transfer Market page, so not trying to search.');
+                return;
+            }
+
+            domUtility.incrementMaxPrice();
+
+            setTimeout(() => {
+                domUtility.clickSearchButton();
+
+                setTimeout(() => {
+                    domUtility.clickModifySearchButton();
+                }, commonUtility.getRandomLongerWait());
+
+            }, commonUtility.getRandomWait());
+
+        } catch (error) {
+            commonUtility.logError('Unable to search to snipe up.');
+            return;
+        }
+
+        commonUtility.log('Successfully incremented max price and searched.');
+    }
+
+    /**
+     * Search to snipe down
+     */
+    function searchToSnipeDown() {
+        commonUtility.log('Attempting to search to snipe down...');
+
+        try {
+            // Only execute this shortcut if in the "Search the Transfer Market" tab.
+            if (!domUtility.isUserOnPage('Search the Transfer Market')) {
+                commonUtility.logError('Not on Search the Transfer Market page, so not trying to search.');
+                return;
+            }
+
+            domUtility.decrementMaxPrice();
+
+            setTimeout(() => {
+                domUtility.clickSearchButton();
+
+                setTimeout(() => {
+                    domUtility.clickModifySearchButton();
+                }, commonUtility.getRandomLongerWait());
+
+            }, commonUtility.getRandomWait());
+
+        } catch (error) {
+            commonUtility.logError('Unable to search to snipe down.');
+            return;
+        }
+
+        commonUtility.log('Successfully decremented max price and searched.');
+    }
 
     /**
      * Buys a regular bronze pack.

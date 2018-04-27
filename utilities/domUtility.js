@@ -1,3 +1,21 @@
+function incrementMaxPrice() {
+    try {
+        const incrementMaxPriceButton = document.querySelector('.searchPrices > .price-filter:last-of-type .incrementBtn');
+        _tapElement(incrementMaxPriceButton);
+    } catch (error) {
+        throw 'Unable to click increment max price button.';
+    }
+}
+
+function decrementMaxPrice() {
+    try {
+        const decrementMaxPriceButton = document.querySelector('.searchPrices > .price-filter:last-of-type .decrementBtn');
+        _tapElement(decrementMaxPriceButton);
+    } catch (error) {
+        throw 'Unable to click decrement max price button.';
+    }
+}
+
 /**
  * Clicks the back button. Throws if button is not
  * available to the user.
@@ -113,14 +131,28 @@ function clickDetailsPanelButton(buttonLabel) {
  * TODO: Make this work.
  */
 function clickSearchButton() {
-    throw 'This shortfut is in development.';
-
     try {
-        const searchButton = document.getElementsByClassName('btn btn-raised call-to-action')[0];
+        const searchButton = document.querySelector('.call-to-action');
         _tapElement(searchButton);
     } catch (error) {
         commonUtility.logError(error);
         throw 'Unable to click "Search" button.';
+    }
+}
+
+/**
+ * Clicks the "Modify Search" button.
+ *
+ */
+function clickModifySearchButton() {
+    try {
+        const modifySearchButton = document.querySelector('.noResultsScreen .call-to-action');
+        if (modifySearchButton) {
+            _tapElement(modifySearchButton);
+        }
+    } catch (error) {
+        commonUtility.logError(error);
+        throw 'Unable to click "Modify Search" button.';
     }
 }
 
@@ -362,12 +394,15 @@ function _tapElement(element) {
 }
 
 window.domUtility = {
+    incrementMaxPrice,
+    decrementMaxPrice,
     clickBackButton,
     clickBronzePackButton,
     clickBuyNowButton,
     clickComparePrice,
     clickDetailsPanelButton,
     clickSearchButton,
+    clickModifySearchButton,
     clickWatchButton,
     confirmDialog,
     getCurrentSelectedIndex,

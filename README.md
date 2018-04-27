@@ -7,9 +7,10 @@
 ![Demo of shortfuts](https://raw.githubusercontent.com/martellaj/shortfuts/master/demo.gif)
 
 ## Currently supported shortcuts
-* **\\** or **n** - Executes "Buy Now" on the current item (on "Search Results" page).
 * **ALT + s** - Toggles the extension on and off.
-* **b** - Buys a regular bronze pack (400 tokens).
+* **numpad 2** - Decrements max buy price and makes a search.
+* **numpad 8** - Increments max buy price and makes a search.
+* **+** - Executes "Buy Now" on the current item (on "Search Results" page).
 * **backspace** - Quickly go from the "Search Results" page back to the "Unassigned" page.
 * **c** - Gets search results for other listings of the current item so you can compare prices.
 * **f** - Gets FUTBIN data for currently selected item.
